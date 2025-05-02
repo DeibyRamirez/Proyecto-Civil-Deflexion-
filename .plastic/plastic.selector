@@ -1,0 +1,4 @@
+repository "Proyecto_Civil@CHEIVIZ@cloud"
+  path "/"
+    br "/main"
+    co "/main"

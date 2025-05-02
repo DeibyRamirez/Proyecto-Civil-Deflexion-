@@ -1,0 +1,34 @@
+[Libraries]
+[Llaves internas de Unity]
+[Lugares temporales]
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+
+# Archivos personales
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Archivos de configuración de OS y editor
+.DS_Store
+*.apk
+*.ipch
+.vscode/
+.idea/
+*.log
+*.bak
+*.old
+*.orig
+*.swp
