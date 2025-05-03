@@ -22,29 +22,30 @@ public class UsosManager : MonoBehaviour
         Inicializar();
     }
 
+    
     public void Inicializar()
+{
+    usos.Clear();
+    usos.Add(new UsosData { nombre = "Voladizos", deflexionLimite = 180f });
+    usos.Add(new UsosData { nombre = "Vigas con yeso", deflexionLimite = 360f });
+    usos.Add(new UsosData { nombre = "Solo carga muerta", deflexionLimite = 200f });
+    usos.Add(new UsosData { nombre = "Combinación crítica", deflexionLimite = 100f });
+    usos.Add(new UsosData { nombre = "Vidrio simple", deflexionLimite = 175f });
+    usos.Add(new UsosData { nombre = "Vidrio doble", deflexionLimite = 250f });
+    usos.Add(new UsosData { nombre = "Cima de columnas", deflexionLimite = 300f });
+
+    dropdown.ClearOptions();
+    List<string> nombres = new List<string>();
+    foreach (UsosData uso in usos)
     {
-        usos.Clear();
-        usos.Add(new UsosData { nombre = "Voladizos que soportan pisos",deflexionLimite = 180f});
-        usos.Add(new UsosData { nombre = "Vigas con acabado de yeso u otro material frájil",deflexionLimite = 360f});
-        usos.Add(new UsosData { nombre = "Carga muerta únicamente",deflexionLimite = 200f});
-        usos.Add(new UsosData { nombre = "Bajo la peor combinación de carga muerta impuesta, viento y nieve",deflexionLimite = 100f});
-        usos.Add(new UsosData { nombre = "Vidrio sencillo",deflexionLimite = 175f});
-        usos.Add(new UsosData { nombre = "Vidrio doble",deflexionLimite = 250f});
-        usos.Add(new UsosData { nombre = "Parte superior de columnas: deflexión horizontal",deflexionLimite = 300f});
-
-        dropdown.ClearOptions();
-        List<string> nombres = new List<string>();
-        foreach (UsosData uso in usos)
-        {
-            nombres.Add(uso.nombre);
-        }
-        dropdown.AddOptions(nombres);
-
-        // Asignar el evento al Dropdown
-        dropdown.onValueChanged.RemoveAllListeners(); // Asegurarse de no duplicar eventos
-        dropdown.onValueChanged.AddListener(CambiarUso);
+        nombres.Add(uso.nombre);
     }
+    dropdown.AddOptions(nombres);
+
+    dropdown.onValueChanged.RemoveAllListeners();
+    dropdown.onValueChanged.AddListener(CambiarUso);
+}
+
 
     void CambiarUso(int index)
     {   
