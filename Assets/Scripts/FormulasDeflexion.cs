@@ -36,10 +36,13 @@ public class FormulasDeflexion : MonoBehaviour
         float w = string.IsNullOrEmpty(inputW.text) ? 0 : float.Parse(inputW.text);
         float M = string.IsNullOrEmpty(inputM.text) ? 0 : float.Parse(inputM.text);
 
-        float E = materialManager.moduloSeleccionado;
+        // E en Pa (conversión desde MPa)
+        float E = materialManager.moduloSeleccionado * 1_000_000f;
+
+        // Deflexión límite: a = L / uso
         float a = L / usosManager.moduloSeleccionado;
 
-        float I = 0f;
+        float I_m4 = 0f;
         float ymax = 0f;
 
         if (SeleccionModelo.modelo == "Modelo (Perlin Rectangular, Muro)")
@@ -47,20 +50,20 @@ public class FormulasDeflexion : MonoBehaviour
             switch (casoSeleccionado)
             {
                 case 1:
-                    I = -(P * Mathf.Pow(L, 3)) / (3 * E * a);
-                    ymax = -(P * Mathf.Pow(L, 3)) / (3 * E * I);
+                    I_m4 = (P * Mathf.Pow(L, 3)) / (3 * E * a);
+                    ymax = (P * Mathf.Pow(L, 3)) / (3 * E * I_m4);
                     break;
                 case 2:
-                    I = -(w * Mathf.Pow(L, 4)) / (8 * E * a);
-                    ymax = -(w * Mathf.Pow(L, 4)) / (8 * E * I);
+                    I_m4 = (w * Mathf.Pow(L, 4)) / (8 * E * a);
+                    ymax = (w * Mathf.Pow(L, 4)) / (8 * E * I_m4);
                     break;
                 case 3:
-                    I = -(M * Mathf.Pow(L, 2)) / (2 * E * a);
-                    ymax = -(M * Mathf.Pow(L, 2)) / (2 * E * I);
+                    I_m4 = (M * Mathf.Pow(L, 2)) / (2 * E * a);
+                    ymax = (M * Mathf.Pow(L, 2)) / (2 * E * I_m4);
                     break;
                 case 4:
-                    I = -(5 * P * Mathf.Pow(L, 3)) / (48 * E * a);
-                    ymax = -(5 * P * Mathf.Pow(L, 3)) / (48 * E * I);
+                    I_m4 = (5 * P * Mathf.Pow(L, 3)) / (48 * E * a);
+                    ymax = (5 * P * Mathf.Pow(L, 3)) / (48 * E * I_m4);
                     break;
                 default:
                     resultadoTexto.text = "Selecciona un caso válido.";
@@ -72,20 +75,20 @@ public class FormulasDeflexion : MonoBehaviour
             switch (casoSeleccionado)
             {
                 case 1:
-                    I = -(P * Mathf.Pow(L, 3)) / (48 * E * a);
-                    ymax = -(P * Mathf.Pow(L, 3)) / (48 * E * I);
+                    I_m4 = (P * Mathf.Pow(L, 3)) / (48 * E * a);
+                    ymax = (P * Mathf.Pow(L, 3)) / (48 * E * I_m4);
                     break;
                 case 2:
-                    I = -(5 * w * Mathf.Pow(L, 4)) / (384 * E * a);
-                    ymax = -(5 * w * Mathf.Pow(L, 4)) / (384 * E * I);
+                    I_m4 = (5 * w * Mathf.Pow(L, 4)) / (384 * E * a);
+                    ymax = (5 * w * Mathf.Pow(L, 4)) / (384 * E * I_m4);
                     break;
                 case 3:
-                    I = -(M * Mathf.Pow(L, 2)) / (9 * Mathf.Sqrt(3) * E * a);
-                    ymax = -(M * Mathf.Pow(L, 2)) / (9 * Mathf.Sqrt(3) * E * I);
+                    I_m4 = (M * Mathf.Pow(L, 2)) / (9 * Mathf.Sqrt(3) * E * a);
+                    ymax = (M * Mathf.Pow(L, 2)) / (9 * Mathf.Sqrt(3) * E * I_m4);
                     break;
                 case 4:
-                    I = -0.00652f * w * Mathf.Pow(L, 4) / (E * a);
-                    ymax = -0.00652f * w * Mathf.Pow(L, 4) / (E * I);
+                    I_m4 = 0.00652f * w * Mathf.Pow(L, 4) / (E * a);
+                    ymax = 0.00652f * w * Mathf.Pow(L, 4) / (E * I_m4);
                     break;
                 default:
                     resultadoTexto.text = "Selecciona un caso válido.";
@@ -98,9 +101,12 @@ public class FormulasDeflexion : MonoBehaviour
             return;
         }
 
-        resultadoTexto.text = $"Deflexión máxima: {ymax:F4} m\nMomento de inercia I: {I:F4} cm⁴";
+        // Conversión de momento de inercia de m^4 a cm^4 (1 m^4 = 10^8 cm^4)
+        float I_cm4 = I_m4 * 100_000_000f;
 
-        float deflexionLimite = a; // ya fue calculado como L / uso
+        resultadoTexto.text = $"Deflexión máxima: {ymax:F4} m\nMomento de inercia I: {I_cm4:F4} cm⁴";
+
+        float deflexionLimite = a;
         resultadoDeflexionLimiteTexto.text = $"Deflexión límite: {deflexionLimite:F4} m";
 
         if (Mathf.Abs(ymax) > deflexionLimite)
