@@ -19,11 +19,11 @@ public class MostrarImagenes : MonoBehaviour
     {
         Sprite[] sprites;
 
-        if (SeleccionModelo.modelo == "Modelo (Perlin Rectangular, Soportes)")
+        if (SeleccionModelo.modelo == "Modelo (Perlin Rectangular, Soportes)" || SeleccionModelo.modelo == "Modelo (Perlin Cuadrado, Soportes)" || SeleccionModelo.modelo == "Modelo (Perlin Circular, Soportes)" || SeleccionModelo.modelo == "Modelo (Perlin H, Soportes)" || SeleccionModelo.modelo == "Modelo (Perlin I, Soportes)")
         {
             sprites = soporteSprites;
         }
-        else if (SeleccionModelo.modelo == "Modelo (Perlin Rectangular, Muro)")
+        else if (SeleccionModelo.modelo == "Modelo (Perlin Rectangular, Muro)" || SeleccionModelo.modelo == "Modelo (Perlin Cuadrado, Muro)" || SeleccionModelo.modelo == "Modelo (Perlin Circular, Muro)" || SeleccionModelo.modelo == "Modelo (Perlin H, Muro)" || SeleccionModelo.modelo == "Modelo (Perlin I, Muro)" )
         {
             sprites = muroSprites;
         }

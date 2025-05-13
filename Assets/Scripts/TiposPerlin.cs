@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 [System.Serializable]
-
 public class Perlines
 {
     public string nombre;
-
 }
+
 public class TiposPerlin : MonoBehaviour
 {
     public List<Perlines> perlines = new List<Perlines>();
@@ -18,10 +17,13 @@ public class TiposPerlin : MonoBehaviour
     public List<RenderTexture> renderTexturesSoporte; // 5 elementos
     public List<RenderTexture> renderTexturesMuro;    // 5 elementos
 
-    public UnityEngine.UI.RawImage rawImageSoporte;
-    public UnityEngine.UI.RawImage rawImageMuro;
+    public RawImage rawImageSoporte;
+    public RawImage rawImageMuro;
 
     public float moduloSeleccionado;
+
+    // Variable estática accesible desde cualquier script
+    public static string nombrePerlinSeleccionado;
 
     void Start()
     {
@@ -31,11 +33,11 @@ public class TiposPerlin : MonoBehaviour
     public void Inicializar()
     {
         perlines.Clear();
-        perlines.Add(new Perlines { nombre = "Perlin Rectangular"});
-        perlines.Add(new Perlines { nombre = "Perlin Cuadrado"});
-        perlines.Add(new Perlines { nombre = "Perlin Circular"});
-        perlines.Add(new Perlines { nombre = "Perlin H"});
-        perlines.Add(new Perlines { nombre = "Perlin I"});
+        perlines.Add(new Perlines { nombre = "Rectangular" });
+        perlines.Add(new Perlines { nombre = "Cuadrado" });
+        perlines.Add(new Perlines { nombre = "Circular" });
+        perlines.Add(new Perlines { nombre = "H" });
+        perlines.Add(new Perlines { nombre = "I" });
 
         dropdown.ClearOptions();
         List<string> nombres = new List<string>();
@@ -54,11 +56,13 @@ public class TiposPerlin : MonoBehaviour
 
     private void OnDropdownValueChanged(int index)
     {
-        // Verifica que hay suficientes render textures
         if (index >= 0 && index < renderTexturesSoporte.Count && index < renderTexturesMuro.Count)
         {
             rawImageSoporte.texture = renderTexturesSoporte[index];
             rawImageMuro.texture = renderTexturesMuro[index];
+
+            // Guardamos el nombre actual del perlin seleccionado
+            nombrePerlinSeleccionado = perlines[index].nombre;
         }
     }
 }
