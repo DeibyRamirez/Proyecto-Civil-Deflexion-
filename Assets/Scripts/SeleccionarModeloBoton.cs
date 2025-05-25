@@ -7,6 +7,7 @@ public class SeleccionarModeloBoton : MonoBehaviour
 
     public RenderTexture texturaSoporte;
     public RenderTexture texturaMuro;
+    
 
     public void SeleccionarSoporte()
     {
@@ -17,6 +18,7 @@ public class SeleccionarModeloBoton : MonoBehaviour
         {
             ModeloSeleccionado.texturaModelo = textura;
         }
+        
 
         administradorPaginas.MostrarPagina(2);
         mostrarImagenes.CargarImagenes();

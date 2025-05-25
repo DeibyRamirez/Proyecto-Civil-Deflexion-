@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // TextMeshPro
+using TMPro;
 
 [System.Serializable]
 public class MaterialData
@@ -17,8 +17,8 @@ public class MaterialManager : MonoBehaviour
     public TMP_Dropdown dropdown;
     public float moduloSeleccionado;
 
-    public GameObject[] modelos; // Array de modelos a los que se les cambiará la textura
-    private Renderer[] perlinRenderers; // Array para los Renderers de los modelos
+    public GameObject[] modelos;
+    private Renderer[] perlinRenderers;
 
     public Material texturaConcreto;
     public Material texturaAcero;
@@ -28,37 +28,35 @@ public class MaterialManager : MonoBehaviour
 
     void Start()
     {
-        Inicializar(); // Llamar a la función de inicialización al inicio
+        Inicializar();
+        // Forzar selección inicial
+        if (dropdown.options.Count > 0)
+        {
+            CambiarMaterial(dropdown.value);
+        }
     }
 
     public void Inicializar()
     {
-        // Inicializar los Renderers de todos los modelos
+        // Inicializar renderers
         perlinRenderers = new Renderer[modelos.Length];
         
         for (int i = 0; i < modelos.Length; i++)
         {
-            GameObject modeloActual = modelos[i];
-            if (modeloActual == null)
+            if (modelos[i] == null)
             {
-                Debug.LogError("No se encontró el modelo en la escena.");
-                return;
+                Debug.LogError("Modelo no asignado en el inspector");
+                continue;
             }
 
-            // Buscar dentro del modelo el objeto "Perlin Rectangulo"
-            string nombrePerlin = "Perlin Rectangular"; // Nombre común para los modelos
-
-            Transform perlinTransform = modeloActual.transform.Find(nombrePerlin);
+            Transform perlinTransform = modelos[i].transform.Find("Perlin Rectangular");
             if (perlinTransform != null)
                 perlinRenderers[i] = perlinTransform.GetComponent<Renderer>();
             else
-            {
-                Debug.LogError($"No se encontró el objeto '{nombrePerlin}' en el modelo.");
-                return;
-            }
+                Debug.LogError("No se encontró 'Perlin Rectangular' en el modelo");
         }
 
-        // Crear y asignar las opciones de materiales
+        // Configurar materiales
         materiales.Clear();
         materiales.Add(new MaterialData { nombre = "Concreto", moduloElasticidad = 21538f, textura = texturaConcreto });
         materiales.Add(new MaterialData { nombre = "Acero", moduloElasticidad = 200000f, textura = texturaAcero });
@@ -66,7 +64,7 @@ public class MaterialManager : MonoBehaviour
         materiales.Add(new MaterialData { nombre = "Madera", moduloElasticidad = 12000f, textura = texturaMadera });
         materiales.Add(new MaterialData { nombre = "Guadua", moduloElasticidad = 10000f, textura = texturaGuadua });
 
-        // Cargar nombres al Dropdown
+        // Configurar dropdown
         dropdown.ClearOptions();
         List<string> nombres = new List<string>();
         foreach (MaterialData material in materiales)
@@ -75,22 +73,24 @@ public class MaterialManager : MonoBehaviour
         }
         dropdown.AddOptions(nombres);
 
-        // Asignar el evento al Dropdown
-        dropdown.onValueChanged.RemoveAllListeners(); // Asegurarse de no duplicar eventos
+        dropdown.onValueChanged.RemoveAllListeners();
         dropdown.onValueChanged.AddListener(CambiarMaterial);
 
-        Debug.Log("MaterialManager inicializado correctamente.");
+        Debug.Log("MaterialManager inicializado correctamente");
     }
 
     void CambiarMaterial(int index)
     {
-        if (perlinRenderers.Length == 0)
+        if (index < 0 || index >= materiales.Count)
         {
-            Debug.LogError("No se encontraron los Renderers para cambiar el material.");
+            Debug.LogError("Índice de material fuera de rango");
             return;
         }
 
         MaterialData materialSeleccionado = materiales[index];
+        moduloSeleccionado = materialSeleccionado.moduloElasticidad;
+
+        // Aplicar textura
         for (int i = 0; i < perlinRenderers.Length; i++)
         {
             if (perlinRenderers[i] != null)
@@ -99,8 +99,6 @@ public class MaterialManager : MonoBehaviour
             }
         }
 
-        moduloSeleccionado = materialSeleccionado.moduloElasticidad;
-
-        Debug.Log($"Material cambiado a: {materialSeleccionado.nombre}, Módulo de Elasticidad: {moduloSeleccionado} MPa");
+        Debug.Log($"Material cambiado a: {materialSeleccionado.nombre}, Módulo: {moduloSeleccionado} MPa");
     }
 }

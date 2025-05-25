@@ -14,16 +14,17 @@ public class TiposPerlin : MonoBehaviour
     public List<Perlines> perlines = new List<Perlines>();
     public TMP_Dropdown dropdown;
 
-    public List<RenderTexture> renderTexturesSoporte; // 5 elementos
-    public List<RenderTexture> renderTexturesMuro;    // 5 elementos
+    public List<RenderTexture> renderTexturesSoporte;
+    public List<RenderTexture> renderTexturesMuro;
 
     public RawImage rawImageSoporte;
     public RawImage rawImageMuro;
 
     public float moduloSeleccionado;
 
-    // Variable estática accesible desde cualquier script
     public static string nombrePerlinSeleccionado;
+
+    [SerializeField] private Tienda tienda; // Ahora lo asignamos desde el Inspector
 
     void Start()
     {
@@ -61,8 +62,17 @@ public class TiposPerlin : MonoBehaviour
             rawImageSoporte.texture = renderTexturesSoporte[index];
             rawImageMuro.texture = renderTexturesMuro[index];
 
-            // Guardamos el nombre actual del perlin seleccionado
             nombrePerlinSeleccionado = perlines[index].nombre;
+
+            // Actualizar la tienda si está asignada
+            if (tienda != null)
+            {
+                tienda.ActualizarTienda();
+            }
+            else
+            {
+                Debug.LogWarning("No se ha asignado la referencia a Tienda en el Inspector");
+            }
         }
     }
 }
