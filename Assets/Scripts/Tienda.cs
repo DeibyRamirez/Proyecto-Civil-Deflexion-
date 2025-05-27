@@ -1,92 +1,94 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Tienda : MonoBehaviour
 {
     [SerializeField] GameObject prefabObjetoTienda;
     
-    [SerializeField] PlantillaObjeto[] listaRectangular;
-    [SerializeField] PlantillaObjeto[] listaCuadrada;
-    [SerializeField] PlantillaObjeto[] listaCircular;
-    [SerializeField] PlantillaObjeto[] listaH;
-    [SerializeField] PlantillaObjeto[] listaI;
+    [SerializeField] List<PlantillaObjeto> listaRectangular;
+    [SerializeField] List<PlantillaObjeto> listaCuadrada;
+    [SerializeField] List<PlantillaObjeto> listaCircular;
+    [SerializeField] List<PlantillaObjeto> listaH;
+    [SerializeField] List<PlantillaObjeto> listaI;
 
     private GameObject parent;
-    private GameObject[] objetosTiendaActuales;
+    private List<GameObject> objetosTiendaActuales = new List<GameObject>();
 
     private void Awake()
     {
         parent = GameObject.FindGameObjectWithTag("Perlines");
-        if (parent == null)
-        {
-            Debug.LogError("No se encontró objeto con tag 'Perlines'");
-        }
     }
 
     public void ActualizarTienda()
     {
-        // Limpiar objetos de tienda anteriores
         LimpiarTiendaActual();
 
-        PlantillaObjeto[] listaSeleccionada = ObtenerListaSegunModelo();
+        // Obtener el I requerido desde FormulasDeflexion
+        float iRequerido = DatosCompartidosTabla.MomentoInerciaRequerido;
+        
+        // Obtener la lista CORRECTA según el modelo seleccionado
+        List<PlantillaObjeto> listaFiltrada = FiltrarObjetos(iRequerido);
 
-        if (listaSeleccionada == null || listaSeleccionada.Length == 0)
+        if (listaFiltrada.Count == 0)
         {
-            Debug.LogError("Lista de tienda vacía o modelo no reconocido");
+            Debug.LogWarning($"No hay objetos con Iy >= {iRequerido} cm⁴");
             return;
         }
 
-        objetosTiendaActuales = new GameObject[listaSeleccionada.Length];
-
-        for (int i = 0; i < listaSeleccionada.Length; i++)
+        // Mostrar solo los objetos filtrados
+        foreach (var objeto in listaFiltrada)
         {
-            GameObject tienda = Instantiate(prefabObjetoTienda, Vector2.zero, Quaternion.identity, parent.transform);
-            Objeto objeto = tienda.GetComponent<Objeto>();
+            GameObject nuevoObjeto = Instantiate(prefabObjetoTienda, parent.transform);
+            nuevoObjeto.GetComponent<Objeto>().CrearObjeto(objeto);
+            objetosTiendaActuales.Add(nuevoObjeto);
+        }
+    }
 
-            if (objeto != null)
+    private List<PlantillaObjeto> FiltrarObjetos(float iRequerido)
+    {
+        // 1. Seleccionar la lista correcta según el modelo
+        List<PlantillaObjeto> listaSeleccionada;
+        
+        switch (TiposPerlin.nombrePerlinSeleccionado)
+        {
+            case "Rectangular": listaSeleccionada = listaRectangular; break;
+            case "Cuadrado":   listaSeleccionada = listaCuadrada;   break;
+            case "Circular":    listaSeleccionada = listaCircular;   break;
+            case "H":           listaSeleccionada = listaH;          break;
+            case "I":           listaSeleccionada = listaI;          break;
+            default:            return new List<PlantillaObjeto>();  // Lista vacía si no hay modelo
+        }
+
+        // 2. Filtrar SOLO los objetos con Iy >= iRequerido
+        List<PlantillaObjeto> listaFiltrada = new List<PlantillaObjeto>();
+
+        foreach (var obj in listaSeleccionada)
+        {
+            // Extraer el número de la cadena "iy" (ejemplo: "12.5 cm⁴" → 12.5f)
+            float iyObjeto = ExtraerNumero(obj.iy);
+
+            if (iyObjeto >= iRequerido)
             {
-                objeto.CrearObjeto(listaSeleccionada[i]);
-                objetosTiendaActuales[i] = tienda;
-            }
-            else
-            {
-                Debug.LogError("Prefab no tiene componente Objeto");
+                listaFiltrada.Add(obj);
             }
         }
+
+        return listaFiltrada;
+    }
+
+    // Método para extraer el valor numérico de "iy" (ejemplo: "8.25 cm⁴" → 8.25f)
+    private float ExtraerNumero(string texto)
+    {
+        string numeroStr = System.Text.RegularExpressions.Regex.Match(texto, @"[\d\.]+").Value;
+        return float.TryParse(numeroStr, out float numero) ? numero : 0f;
     }
 
     private void LimpiarTiendaActual()
     {
-        if (objetosTiendaActuales != null && objetosTiendaActuales.Length > 0)
+        foreach (var obj in objetosTiendaActuales)
         {
-            foreach (GameObject obj in objetosTiendaActuales)
-            {
-                if (obj != null)
-                {
-                    Destroy(obj);
-                }
-            }
+            if (obj != null) Destroy(obj);
         }
-    }
-
-    private PlantillaObjeto[] ObtenerListaSegunModelo()
-    {
-        string modelo = TiposPerlin.nombrePerlinSeleccionado;
-
-        switch (modelo)
-        {
-            case "Rectangular":
-                return listaRectangular;
-            case "Cuadrado":
-                return listaCuadrada;
-            case "Circular":
-                return listaCircular;
-            case "H":
-                return listaH;
-            case "I":
-                return listaI;
-            default:
-                Debug.LogWarning("Modelo no reconocido: " + modelo);
-                return null;
-        }
+        objetosTiendaActuales.Clear();
     }
 }

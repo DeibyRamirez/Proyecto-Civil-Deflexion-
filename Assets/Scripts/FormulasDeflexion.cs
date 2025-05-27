@@ -147,6 +147,12 @@ public class FormulasDeflexion : MonoBehaviour
         resultadoTexto.text = $"Deflexión máxima: {ymax:F4} m\nMomento de inercia I: {I_cm4:F4} cm⁴";
         resultadoDeflexionLimiteTexto.text = $"Deflexión límite: {deflexionLimite:F4} m";
 
+        // Guardar el valor para usarlo en la tienda
+        DatosCompartidosTabla.MomentoInerciaRequerido = I_cm4;
+        Debug.Log($"Momento de inercia requerido guardado: {I_cm4} cm⁴");
+
+        FindFirstObjectByType<Tienda>()?.ActualizarTienda();
+        
         if (float.IsNaN(ymax) || float.IsInfinity(ymax))
         {
             Debug.LogError("Resultado inválido (NaN o Infinito) - Revise las entradas");
@@ -164,8 +170,11 @@ public class FormulasDeflexion : MonoBehaviour
         }
 
         Debug.Log("=== FIN DE CÁLCULO ===");
-        
+
+
+
     }
+
 
     private bool ValidarEntradas()
     {
