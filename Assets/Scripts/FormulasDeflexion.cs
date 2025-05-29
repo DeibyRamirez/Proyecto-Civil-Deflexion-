@@ -160,12 +160,12 @@ public class FormulasDeflexion : MonoBehaviour
         }
         else if (Mathf.Abs(ymax) > deflexionLimite)
         {
-            resultadoTexto.text += "\n¡Atención! La deflexión máxima excede el límite permitido.";
+            
             Debug.LogWarning("Deflexión excede el límite permitido");
         }
         else
         {
-            resultadoTexto.text += "\nLa deflexión máxima está dentro del límite permitido.";
+            
             Debug.Log("Deflexión dentro de límites aceptables");
         }
 
