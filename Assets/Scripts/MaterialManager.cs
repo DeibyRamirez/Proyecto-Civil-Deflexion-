@@ -18,7 +18,7 @@ public class MaterialManager : MonoBehaviour
     public float moduloSeleccionado;
 
     public GameObject[] modelos;
-    private Renderer[] perlinRenderers;
+    private List<Renderer> perlinRenderers = new List<Renderer>();
 
     public Material texturaConcreto;
     public Material texturaAcero;
@@ -38,22 +38,46 @@ public class MaterialManager : MonoBehaviour
 
     public void Inicializar()
     {
-        // Inicializar renderers
-        perlinRenderers = new Renderer[modelos.Length];
+        // Limpiar lista de renderers
+        perlinRenderers.Clear();
         
-        for (int i = 0; i < modelos.Length; i++)
+        // Buscar todos los posibles Perlines en cada modelo
+        string[] posiblesPerlines = {
+            "Perlin Rectangular",
+            "Perlin Cuadrado",
+            "Perlin Circular",
+            "Perlin H",
+            "Perlin I"
+        };
+
+        foreach (GameObject modelo in modelos)
         {
-            if (modelos[i] == null)
+            if (modelo == null)
             {
                 Debug.LogError("Modelo no asignado en el inspector");
                 continue;
             }
 
-            Transform perlinTransform = modelos[i].transform.Find("Perlin Rectangular");
-            if (perlinTransform != null)
-                perlinRenderers[i] = perlinTransform.GetComponent<Renderer>();
-            else
-                Debug.LogError("No se encontró 'Perlin Rectangular' en el modelo");
+            bool encontrado = false;
+            foreach (string perlinName in posiblesPerlines)
+            {
+                Transform perlinTransform = modelo.transform.Find(perlinName);
+                if (perlinTransform != null)
+                {
+                    Renderer renderer = perlinTransform.GetComponent<Renderer>();
+                    if (renderer != null)
+                    {
+                        perlinRenderers.Add(renderer);
+                        encontrado = true;
+                        break; // Salir del bucle si encontramos un Perlin
+                    }
+                }
+            }
+
+            if (!encontrado)
+            {
+                Debug.LogError($"No se encontró ningún Perlin conocido en el modelo {modelo.name}");
+            }
         }
 
         // Configurar materiales
@@ -90,12 +114,12 @@ public class MaterialManager : MonoBehaviour
         MaterialData materialSeleccionado = materiales[index];
         moduloSeleccionado = materialSeleccionado.moduloElasticidad;
 
-        // Aplicar textura
-        for (int i = 0; i < perlinRenderers.Length; i++)
+        // Aplicar textura a todos los Perlines encontrados
+        foreach (Renderer renderer in perlinRenderers)
         {
-            if (perlinRenderers[i] != null)
+            if (renderer != null)
             {
-                perlinRenderers[i].material = materialSeleccionado.textura;
+                renderer.material = materialSeleccionado.textura;
             }
         }
 
