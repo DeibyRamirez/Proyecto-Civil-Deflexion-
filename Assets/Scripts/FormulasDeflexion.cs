@@ -12,6 +12,8 @@ public class FormulasDeflexion : MonoBehaviour
     [Header("Referencias externas")]
     public MaterialManager materialManager;
     public UsosManager usosManager;
+    public Alerta alerta; // referencia al script Alerta
+
 
     private int casoSeleccionado;
     private string modeloSeleccionado;
@@ -152,7 +154,7 @@ public class FormulasDeflexion : MonoBehaviour
         Debug.Log($"Momento de inercia requerido guardado: {I_cm4} cm⁴");
 
         FindFirstObjectByType<Tienda>()?.ActualizarTienda();
-        
+
         if (float.IsNaN(ymax) || float.IsInfinity(ymax))
         {
             Debug.LogError("Resultado inválido (NaN o Infinito) - Revise las entradas");
@@ -160,12 +162,12 @@ public class FormulasDeflexion : MonoBehaviour
         }
         else if (Mathf.Abs(ymax) > deflexionLimite)
         {
-            
+
             Debug.LogWarning("Deflexión excede el límite permitido");
         }
         else
         {
-            
+
             Debug.Log("Deflexión dentro de límites aceptables");
         }
 
@@ -180,41 +182,43 @@ public class FormulasDeflexion : MonoBehaviour
     {
         if (materialManager == null)
         {
-            Debug.LogError("MaterialManager no asignado");
-            resultadoTexto.text = "Error: Falta configurar materiales";
+            alerta.MostrarAlerta("Error: Falta configurar materiales.");
             return false;
         }
 
         if (usosManager == null)
         {
-            Debug.LogError("UsosManager no asignado");
-            resultadoTexto.text = "Error: Falta configurar usos";
+            alerta.MostrarAlerta("Error: Falta configurar usos.");
             return false;
         }
 
         if (Mathf.Approximately(materialManager.moduloSeleccionado, 0f))
         {
-            Debug.LogError("No se ha seleccionado material o módulo es 0");
-            resultadoTexto.text = "Error: Selecciona un material válido";
+            alerta.MostrarAlerta("Error: Selecciona un material válido.");
             return false;
         }
 
         if (Mathf.Approximately(usosManager.moduloSeleccionado, 0f))
         {
-            Debug.LogError("No se ha seleccionado uso o límite es 0");
-            resultadoTexto.text = "Error: Selecciona un uso válido";
+            alerta.MostrarAlerta("Error: Selecciona un uso válido.");
             return false;
         }
 
         if (string.IsNullOrEmpty(inputL.text))
         {
-            Debug.LogError("Longitud L no especificada");
-            resultadoTexto.text = "Error: Ingresa la longitud L";
+            alerta.MostrarAlerta("Error: Ingresa la longitud L.");
+            return false;
+        }
+
+        if (casoSeleccionado == 0)
+        {
+            alerta.MostrarAlerta("Error: Debes seleccionar un caso.");
             return false;
         }
 
         return true;
     }
+
 
     private float ObtenerValor(TMP_InputField field, string nombre, bool opcional = false)
     {
@@ -222,21 +226,22 @@ public class FormulasDeflexion : MonoBehaviour
         {
             if (!opcional)
             {
-                Debug.LogError($"{nombre} no especificado");
-                resultadoTexto.text = $"Error: {nombre} requerido";
+                alerta.MostrarAlerta($"Error: {nombre} es requerido.");
+                return float.NaN; // Retorna NaN si falta dato obligatorio
             }
-            return 0f;
+            return 0f; // Si es opcional y no hay dato, usa 0
         }
 
         if (!float.TryParse(field.text, out float valor))
         {
-            Debug.LogError($"{nombre} no es un número válido");
-            resultadoTexto.text = $"Error: {nombre} inválido";
-            return 0f;
+            alerta.MostrarAlerta($"Error: {nombre} inválido.");
+            return float.NaN; // Retorna NaN si no se pudo parsear
         }
 
         return valor;
     }
+
+
 
     private float SafeDivide(float numerator, float denominator)
     {
