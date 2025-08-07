@@ -18,6 +18,12 @@
             "deviceId": "gehi7h8lprkj55tw",
             "name": "com.miui.home",
             "processId": 3290,
+            "exited": true
+        },
+        {
+            "deviceId": "gehi7h8lprkj55tw",
+            "name": "com.miui.home",
+            "processId": 3173,
             "exited": false
         }
     ],

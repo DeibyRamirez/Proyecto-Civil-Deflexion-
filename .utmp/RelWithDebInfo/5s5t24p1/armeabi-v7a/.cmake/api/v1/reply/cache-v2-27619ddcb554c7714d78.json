@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "arm64-v8a"
+			"value" : "armeabi-v7a"
 		},
 		{
 			"name" : "ANDROID_NDK",
@@ -87,7 +87,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "arm64-v8a"
+			"value" : "armeabi-v7a"
 		},
 		{
 			"name" : "CMAKE_ANDROID_NDK",
@@ -175,7 +175,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "d:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/arm64-v8a"
+			"value" : "d:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/armeabi-v7a"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -679,7 +679,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "D:\\Programas\\Proyectos_Unity\\Proyecto_Civil\\.utmp\\RelWithDebInfo\\5s5t24p1\\prefab\\arm64-v8a\\prefab"
+			"value" : "D:\\Programas\\Proyectos_Unity\\Proyecto_Civil\\.utmp\\RelWithDebInfo\\5s5t24p1\\prefab\\armeabi-v7a\\prefab"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -775,7 +775,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "D:\\Programas\\Proyectos_Unity\\Proyecto_Civil\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\5s5t24p1\\obj\\arm64-v8a"
+			"value" : "D:\\Programas\\Proyectos_Unity\\Proyecto_Civil\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\5s5t24p1\\obj\\armeabi-v7a"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1047,7 +1047,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "D:\\Programas\\Proyectos_Unity\\Proyecto_Civil\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\5s5t24p1\\obj\\arm64-v8a"
+			"value" : "D:\\Programas\\Proyectos_Unity\\Proyecto_Civil\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\5s5t24p1\\obj\\armeabi-v7a"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1319,7 +1319,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/arm64-v8a"
+			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/armeabi-v7a"
 		},
 		{
 			"name" : "Unity_IS_TOP_LEVEL",
@@ -1355,7 +1355,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity"
+			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/game-activity"
 		},
 		{
 			"name" : "game_BINARY_DIR",
@@ -1367,7 +1367,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/arm64-v8a/GameActivity"
+			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/armeabi-v7a/GameActivity"
 		},
 		{
 			"name" : "game_IS_TOP_LEVEL",
@@ -1415,7 +1415,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/games-frame-pacing"
+			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/prefab/armeabi-v7a/prefab/lib/arm-linux-androideabi/cmake/games-frame-pacing"
 		},
 		{
 			"name" : "swappywrapper_BINARY_DIR",
@@ -1427,7 +1427,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/arm64-v8a/FramePacing"
+			"value" : "D:/Programas/Proyectos_Unity/Proyecto_Civil/.utmp/RelWithDebInfo/5s5t24p1/armeabi-v7a/FramePacing"
 		},
 		{
 			"name" : "swappywrapper_IS_TOP_LEVEL",
